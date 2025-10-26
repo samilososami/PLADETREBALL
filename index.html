@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Pla de treball</title>
 
-  <!-- Tipografies: estil “Canva” -->
+  <!-- Tipografies: estil "Canva" -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;800&family=Poppins:wght@400;600;800&family=Bebas+Neue&family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Merriweather:wght@400;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
@@ -19,9 +19,14 @@
       --font-mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
 
       --bg: #fff; --fg:#000; --border: rgba(0,0,0,.12); --muted: rgba(0,0,0,.6);
+      --shadow: 0 4px 12px rgba(0,0,0,0.05);
+      --shadow-lg: 0 8px 24px rgba(0,0,0,0.08);
+      --radius: 1rem;
     }
     [data-theme="dark"]{
-      --bg:#000; --fg:#fff; --border: rgba(255,255,255,.12); --muted: rgba(255,255,255,.7);
+      --bg:#0a0a0a; --fg:#f5f5f5; --border: rgba(255,255,255,.15); --muted: rgba(255,255,255,.6);
+      --shadow: 0 4px 12px rgba(0,0,0,0.2);
+      --shadow-lg: 0 8px 24px rgba(0,0,0,0.3);
     }
     [data-type="modern"]{ --font-display: 'Bebas Neue', Poppins, Inter, sans-serif; --font-sans: Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif; --font-ui: Poppins, Inter, sans-serif; --font-serif: 'Playfair Display','Merriweather', Georgia, serif; --font-mono:'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, monospace; }
     [data-type="editorial"]{ --font-display: 'Playfair Display','Merriweather', Georgia, serif; --font-sans: Merriweather, Georgia, serif; --font-ui: 'Playfair Display','Merriweather', Georgia, serif; --font-serif: Merriweather, Georgia, serif; --font-mono:'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, monospace; }
@@ -33,61 +38,142 @@
       margin:0; background:var(--bg); color:var(--fg);
       font-family: var(--font-sans);
       -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale;
+      overflow-x: hidden;
     }
-    ::selection{ background:#000; color:#fff }
+    ::selection{ background: rgba(0,0,0,0.1); color:var(--fg) }
+    [data-theme="dark"] ::selection{ background: rgba(255,255,255,0.2); }
 
     .container{ max-width:1152px; margin:0 auto; padding: 0 1rem }
     .grid{ display:grid; gap: 1.5rem }
 
     header.app{
       position: sticky; top:0; z-index:40;
-      backdrop-filter: blur(6px);
-      background: color-mix(in oklab, var(--bg), transparent 40%);
+      backdrop-filter: blur(12px);
+      background: color-mix(in oklab, var(--bg), transparent 20%);
       border-bottom:1px solid var(--border);
       display:flex; align-items:center; justify-content:space-between;
       padding: .75rem 1rem;
+      transition: all 0.2s ease;
     }
     .brand{ display:flex; align-items:center; gap:.75rem }
-    .brand-badge{ width:36px; height:36px; display:grid; place-items:center; border:1px solid currentColor; border-radius:999px; font-family: var(--font-ui); font-weight:600 }
+    .brand-badge{ 
+      width:36px; height:36px; display:grid; place-items:center; 
+      border:1px solid currentColor; border-radius:999px; 
+      font-family: var(--font-ui); font-weight:600;
+      transition: all 0.2s ease;
+    }
+    .brand-badge:hover {
+      transform: rotate(5deg);
+    }
     .brand h1{ margin:0; font: 600 1.1rem var(--font-ui); letter-spacing:.01em }
 
-    .btn{ border:1px solid currentColor; background:transparent; color:var(--fg); padding:.45rem .8rem; border-radius:999px; font:500 .9rem var(--font-ui); cursor:pointer }
-    .btn:hover{ opacity:.82 }
+    .btn{ 
+      border:1px solid var(--border); background:transparent; color:var(--fg); 
+      padding:.45rem .8rem; border-radius:999px; 
+      font:500 .9rem var(--font-ui); cursor:pointer;
+      transition: all 0.2s ease;
+      position: relative;
+      overflow: hidden;
+    }
+    .btn:hover{ 
+      background: color-mix(in oklab, currentColor, transparent 95%);
+      border-color: currentColor;
+    }
+    .btn:active {
+      transform: scale(0.98);
+    }
     .toolbar{ display:flex; gap:.5rem; align-items:center }
     select{
       border:1px solid color-mix(in oklab, currentColor, transparent 80%);
       background:transparent; color:var(--fg);
-      border-radius:999px; padding:.3rem .7rem; font: 500 .85rem var(--font-ui)
+      border-radius:999px; padding:.3rem .7rem; font: 500 .85rem var(--font-ui);
+      transition: all 0.2s ease;
+      cursor: pointer;
+    }
+    select:hover {
+      border-color: currentColor;
     }
 
-    .progress{ position:absolute; left:0; right:0; bottom:0; height:2px; background:transparent }
-    .progress > i{ display:block; height:100%; width:0; background: currentColor }
+    .progress{ 
+      position: fixed; 
+      left:0; 
+      top:0; 
+      width:100%; 
+      height:3px; 
+      background:transparent;
+      z-index: 50;
+    }
+    .progress > i{ 
+      display:block; 
+      height:100%; 
+      width:0; 
+      background: currentColor; 
+      transition: width 0.2s ease;
+      box-shadow: 0 0 10px currentColor;
+    }
 
-    .bg-dots{ position:fixed; inset:0; z-index:-1; opacity:.04; background-image: radial-gradient(currentColor .6px, transparent .6px); background-size:18px 18px }
+    .bg-dots{ 
+      position:fixed; inset:0; z-index:-1; opacity:.04; 
+      background-image: radial-gradient(currentColor .6px, transparent .6px); 
+      background-size:18px 18px 
+    }
 
     .layout{ display:grid; grid-template-columns: 260px 1fr; gap:2rem; padding: 2rem 0 }
     @media (max-width: 900px){ .layout{ grid-template-columns: 1fr } }
 
     .sidebar{ position: sticky; top:92px; align-self:start }
     .sidebar h6{ margin:.25rem 0 .75rem; color:var(--muted); font: 600 .72rem var(--font-mono); letter-spacing:.18em; text-transform:uppercase }
-    .nav a{ display:flex; gap:.5rem; align-items:center; padding:.35rem .5rem; border-radius:.6rem; text-decoration:none; color:inherit }
-    .nav a.active{ background: color-mix(in oklab, currentColor, transparent 90%) }
-    .nav a:hover{ text-decoration: underline }
+    .nav a{ 
+      display:flex; gap:.5rem; align-items:center; padding:.35rem .5rem; 
+      border-radius:.6rem; text-decoration:none; color:inherit;
+      transition: all 0.2s ease;
+    }
+    .nav a.active{ 
+      background: color-mix(in oklab, currentColor, transparent 92%);
+      font-weight: 600;
+    }
+    .nav a:hover{ 
+      background: color-mix(in oklab, currentColor, transparent 95%);
+    }
 
-    .card{ border:1px solid var(--border); border-radius:1.2rem; padding:1.25rem; box-shadow: 0 6px 18px 0 color-mix(in oklab, var(--fg), transparent 92%) }
+    .card{ 
+      border:1px solid var(--border); border-radius:var(--radius); 
+      padding:1.5rem; 
+      box-shadow: var(--shadow);
+      transition: all 0.2s ease;
+    }
+    .card:hover {
+      box-shadow: var(--shadow-lg);
+    }
     .hero{ position:relative }
-    .hero .title{ font: 900 clamp(2.2rem, 6vw, 4.2rem) var(--font-display); line-height:.92; letter-spacing:.02em; margin:.2rem 0 .7rem }
+    .hero .title{ 
+      font: 900 clamp(2.2rem, 6vw, 4.2rem) var(--font-display); 
+      line-height:.92; letter-spacing:.02em; margin:.2rem 0 .7rem;
+    }
     .muted{ color:var(--muted) }
 
     .hline{ height:1px; background: var(--border); margin: .75rem 0 }
     .chips{ display:flex; gap:.5rem; margin-top:.75rem }
 
     .gallery{ display:grid; grid-template-columns: repeat(3, 1fr); gap:.5rem }
-    .gallery img{ width:100%; height: 180px; object-fit: cover; border:1px solid var(--border); border-radius:.9rem; box-shadow: 0 4px 12px 0 color-mix(in oklab, var(--fg), transparent 93%) }
+    .gallery img{ 
+      width:100%; height: 180px; object-fit: cover; 
+      border:1px solid var(--border); border-radius:.9rem; 
+      box-shadow: 0 4px 12px 0 color-mix(in oklab, var(--fg), transparent 93%);
+      transition: all 0.3s ease;
+      filter: grayscale(1);
+    }
+    .gallery img:hover {
+      filter: grayscale(0.7);
+    }
 
-    .section{ scroll-margin-top: 92px }
+    .section{ 
+      scroll-margin-top: 92px;
+    }
     .section header{ display:flex; gap:.6rem; align-items:center; margin-bottom:.8rem }
-    .section h3{ font: 700 1.6rem var(--font-ui); margin:0 }
+    .section h3{ 
+      font: 700 1.6rem var(--font-ui); margin:0;
+    }
 
     .kpi-grid{ display:grid; grid-template-columns: repeat(4,1fr); gap:1rem }
     @media (max-width:900px){ .kpi-grid{ grid-template-columns: 1fr 1fr } }
@@ -100,18 +186,81 @@
     .serif{ font-family: var(--font-serif) }
     .ui{ font-family: var(--font-ui) }
     .bar{ height:6px; border-radius:999px; background: color-mix(in oklab, currentColor, transparent 90%) }
-    .bar > i{ display:block; height:100%; background: currentColor; border-radius:inherit }
+    .bar > i{ 
+      display:block; height:100%; background: currentColor; 
+      border-radius:inherit;
+      transition: width 0.8s ease;
+    }
 
-    footer{ border-top:1px solid var(--border); padding-top:1.2rem; margin-top:1rem }
+    footer{ 
+      border-top:1px solid var(--border); 
+      padding-top:1.2rem; 
+      margin-top:1rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+    .footer-info {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+    .footer-contact {
+      display: flex;
+      gap: 1rem;
+      align-items: center;
+    }
+    .creator-info {
+      font-family: var(--font-sans);
+      font-size: 1rem;
+      color: var(--muted);
+    }
+/* Tipografía simple para los nombres del crédito */
+    .creator-name {
+      font-family: Arial, Helvetica, sans-serif;
+      font-style: italic;
+      font-weight: 500; /* “grosor mediano” */
+    }
+    .chatgpt-icon {
+      display: inline-block;
+      width: 16px;
+      height: 16px;
+      background: currentColor;
+      mask-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 15h2v2h-2zm0-12h2v10h-2z"/></svg>');
+      mask-size: contain;
+      mask-repeat: no-repeat;
+      mask-position: center;
+      margin-left: 4px;
+      vertical-align: middle;
+    }
 
     /* Mobile dock */
-    .dock{ position: fixed; left:0; right:0; bottom:18px; display:none; padding: 0 1rem }
-    .dock .inner{ display:flex; gap:.6rem; padding:.5rem .7rem; border-radius:999px; color: var(--bg); background: var(--fg) }
-    .dock a{ color:inherit; text-decoration:none; font: 600 .85rem var(--font-ui) }
+    .dock{ 
+      position: fixed; left:0; right:0; bottom:18px; display:none; padding: 0 1rem;
+    }
+    .dock .inner{ 
+      display:flex; gap:.6rem; padding:.5rem .7rem; 
+      border-radius:999px; color: var(--bg); background: var(--fg);
+      box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+    }
+    .dock a{ 
+      color:inherit; text-decoration:none; font: 600 .85rem var(--font-ui);
+      padding: 0.3rem 0.6rem;
+      border-radius: 999px;
+      transition: all 0.2s ease;
+    }
+    .dock a:hover {
+      background: rgba(255,255,255,0.1);
+    }
     @media (max-width: 900px){ .dock{ display:block } .sidebar{ display:none } }
 
     /* Simple icons (inline SVG via CSS masks) */
-    .ico{ width:20px; height:20px; display:inline-block; background: currentColor; mask-size: contain; mask-repeat: no-repeat; mask-position:center }
+    .ico{ 
+      width:20px; height:20px; display:inline-block; background: currentColor; 
+      mask-size: contain; mask-repeat: no-repeat; mask-position:center;
+    }
     .ico.msg{ mask-image:url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="%23000" stroke-width="1.6"><path d="M21 15a4 4 0 01-4 4H7l-4 4V7a4 4 0 014-4h10a4 4 0 014 4z"/></svg>') }
     .ico.book{ mask-image:url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="%23000" stroke-width="1.6"><path d="M4 19.5A2.5 2.5 0 016.5 17H20"/><path d="M4 4v15.5A2.5 2.5 0 016.5 22H20V4a2 2 0 00-2-2H6a2 2 0 00-2 2z"/></svg>') }
     .ico.brief{ mask-image:url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="%23000" stroke-width="1.6"><rect x="3" y="7" width="18" height="13" rx="2"/><path d="M16 7V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v2"/><path d="M3 12h18"/></svg>') }
@@ -123,10 +272,41 @@
     .ico.phone{ mask-image:url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="%23000" stroke-width="1.6"><path d="M22 16.92v2a2 2 0 01-2.18 2 19.86 19.86 0 01-8.63-3.07 19.5 19.5 0 01-6-6A19.86 19.86 0 012.1 4.18 2 2 0 014.11 2h2a2 2 0 012 1.72c.12.9.31 1.77.57 2.61a2 2 0 01-.45 2.11L7 9a16 16 0 006 6l.56-1.24a2 2 0 012.11-.45c.84.26 1.71.45 2.61.57A2 2 0 0122 16.92z"/></svg>') }
     .ico.map{ mask-image:url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="%23000" stroke-width="1.6"><path d="M9 18l-6 3V6l6-3 6 3 6-3v15l-6 3-6-3 0-12 6 3v12"/></svg>') }
     .ico.link{ mask-image:url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="%23000" stroke-width="1.6"><path d="M10 13a5 5 0 007.07 0l1.76-1.76a5 5 0 10-7.07-7.07L10 5"/><path d="M14 11a5 5 0 00-7.07 0L5.17 12.76a5 5 0 107.07 7.07L14 19"/></svg>') }
+
+    /* Subtle animations */
+    .fade-in {
+      animation: fadeIn 0.6s ease forwards;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .stagger > * {
+      opacity: 0;
+      animation: fadeIn 0.5s ease forwards;
+    }
+    .stagger > *:nth-child(1) { animation-delay: 0.1s; }
+    .stagger > *:nth-child(2) { animation-delay: 0.2s; }
+    .stagger > *:nth-child(3) { animation-delay: 0.3s; }
+    .stagger > *:nth-child(4) { animation-delay: 0.4s; }
+
+    /* Pulse animation for buttons */
+    .pulse {
+      animation: pulse 0.5s ease;
+    }
+    @keyframes pulse {
+      0% { transform: scale(1); }
+      50% { transform: scale(0.95); }
+      100% { transform: scale(1); }
+    }
   </style>
 </head>
 <body data-theme="light" data-type="modern">
   <div class="bg-dots"></div>
+
+  <!-- Progress bar fixed at top -->
+  <div class="progress"><i id="progressBar"></i></div>
 
   <header class="app">
     <div class="brand">
@@ -141,10 +321,8 @@
         <option value="tech">Tech</option>
       </select>
       <button class="btn" id="printBtn">Imprimeix</button>
-      <button class="btn" id="imgToggle">Amaga imatges</button>
       <button class="btn" id="themeToggle">Mode fosc</button>
     </div>
-    <div class="progress"><i id="progressBar"></i></div>
   </header>
 
   <main class="container layout">
@@ -165,7 +343,7 @@
     <!-- Content -->
     <div id="content" class="grid" style="gap:2.4rem">
       <!-- Intro / Hero -->
-      <section id="intro" class="section">
+      <section id="intro" class="section fade-in">
         <div class="card hero">
           <div class="grid" style="grid-template-columns: 1.2fr 1fr; align-items:center">
             <div>
@@ -173,8 +351,8 @@
               <h2 class="title">Pla de treball</h2>
               <p class="serif muted" style="max-width:60ch">Un recorregut en blanc i negre per tot el que necessites: carta de presentació, CV, entrevista i adaptació al lloc de treball. Amb exemples reals i micro‑interaccions per navegar amb comoditat.</p>
               <div class="chips">
-                <a href="#carta" class="btn ui">Comença</a>
-                <a href="#exemplecv" class="btn ui">Veure CV</a>
+                <a href="#carta" class="btn" id="comencaBtn">Comença</a>
+                <a href="#exemplecv" class="btn" id="veureCvBtn">Veure CV</a>
               </div>
             </div>
             <div id="introGallery" class="gallery"></div>
@@ -184,29 +362,29 @@
       </section>
 
       <!-- Carta de presentació -->
-      <section id="carta" class="section">
+      <section id="carta" class="section fade-in">
         <header>
           <span class="ico msg"></span>
           <h3>Com és una carta de presentació</h3>
         </header>
         <div class="grid" style="grid-template-columns: 1fr 1fr; align-items:start">
-          <div class="grid" style="gap:1rem">
-            <div class="card serif"> <p><strong class="ui">Què és?</strong> Un document breu que acompanya el currículum i et presenta com a candidat. La seva funció és captar l’atenció i mostrar interès pel lloc.</p></div>
-            <div class="card serif"> <p><strong class="ui">Funció:</strong> Explicar qui ets, què pots aportar i per què t’interessa la feina. Serveix per destacar punts forts abans de l’entrevista.</p></div>
-            <div class="card serif"> <p><strong class="ui">Com ha de ser?</strong> Formal, clara i personalitzada per a cada empresa. Inclou una introducció, un cos amb habilitats/experiències i un comiat agraint l’atenció.</p></div>
+          <div class="grid stagger" style="gap:1rem">
+            <div class="card serif"> <p><strong class="ui">Què és?</strong> Un document breu que acompanya el currículum i et presenta com a candidat. La seva funció és captar l'atenció i mostrar interès pel lloc.</p></div>
+            <div class="card serif"> <p><strong class="ui">Funció:</strong> Explicar qui ets, què pots aportar i per què t'interessa la feina. Serveix per destacar punts forts abans de l'entrevista.</p></div>
+            <div class="card serif"> <p><strong class="ui">Com ha de ser?</strong> Formal, clara i personalitzada per a cada empresa. Inclou una introducció, un cos amb habilitats/experiències i un comiat agraint l'atenció.</p></div>
           </div>
           <div id="cartaGallery" class="gallery"></div>
         </div>
       </section>
 
       <!-- CV - com elaborar -->
-      <section id="cv" class="section">
+      <section id="cv" class="section fade-in">
         <header>
           <span class="ico book"></span>
           <h3>Com elaborar un bon CV</h3>
         </header>
         <div class="grid" style="grid-template-columns: 1fr 1fr; align-items:start">
-          <div class="grid" style="gap:1rem">
+          <div class="grid stagger" style="gap:1rem">
             <div class="card serif"><p><strong class="ui">Què és:</strong> el resum professional que mostra, de manera ordenada, experiència, formació i competències.</p></div>
             <div class="card serif"><p><strong class="ui">Com ha de ser:</strong> net, llegible i sense errades. Inclou dades personals, experiència, formació acadèmica, idiomes i habilitats rellevants.</p></div>
             <ul class="serif" style="margin:0 0 0 1.1rem">
@@ -220,16 +398,16 @@
       </section>
 
       <!-- Entrevista -->
-      <section id="entrevista" class="section">
+      <section id="entrevista" class="section fade-in">
         <header>
           <span class="ico brief"></span>
           <h3>Consells per a una entrevista de feina</h3>
         </header>
-        <div class="kpi-grid">
+        <div class="kpi-grid stagger">
           <div class="card">
             <div class="mono muted" style="text-transform:uppercase; letter-spacing:.16em; font-size:.72rem">Pas 1</div>
             <div class="ui" style="font-weight:600; font-size:1.1rem; margin-top:.2rem">Preparació</div>
-            <p class="serif muted">Informa’t sobre l’empresa i prepara preguntes.</p>
+            <p class="serif muted">Informa't sobre l'empresa i prepara preguntes.</p>
           </div>
           <div class="card">
             <div class="mono muted" style="text-transform:uppercase; letter-spacing:.16em; font-size:.72rem">Pas 2</div>
@@ -251,14 +429,14 @@
       </section>
 
       <!-- Adaptació -->
-      <section id="adaptacio" class="section">
+      <section id="adaptacio" class="section fade-in">
         <header>
           <span class="ico shield"></span>
           <h3>Adaptació al lloc de treball</h3>
         </header>
         <div class="grid" style="grid-template-columns:1fr 1fr; align-items:start">
-          <div class="grid" style="gap:1rem">
-            <div class="card serif"><p><strong class="ui">Què vol dir:</strong> cada feina demana competències específiques; adaptar-s’hi millora rendiment, motivació i clima laboral.</p></div>
+          <div class="grid stagger" style="gap:1rem">
+            <div class="card serif"><p><strong class="ui">Què vol dir:</strong> cada feina demana competències específiques; adaptar-s'hi millora rendiment, motivació i clima laboral.</p></div>
             <div class="card serif"><p><strong class="ui">Per què és important:</strong> també beneficia el treballador, que creix professionalment i guanya satisfacció.</p></div>
           </div>
           <div id="adaptacioGallery" class="gallery"></div>
@@ -266,22 +444,22 @@
       </section>
 
       <!-- Exemple de CV -->
-      <section id="exemplecv" class="section">
+      <section id="exemplecv" class="section fade-in">
         <header>
           <span class="ico book"></span>
           <h3>Exemple de CV</h3>
         </header>
 
         <div class="chips" style="margin-bottom:.6rem">
-          <button class="btn ui" id="cvWide">Ample</button>
-          <button class="btn ui" id="cvCompact">Compacta</button>
+          <button class="btn" id="cvWide">Ample</button>
+          <button class="btn" id="cvCompact">Compacta</button>
         </div>
 
-        <div id="cvWrap" class="cv-grid">
+        <div id="cvWrap" class="cv-grid stagger">
           <article class="card" style="display:grid; gap:1rem">
             <div class="cv-title">Sami Gonzalez</div>
             <div class="mono muted" style="text-transform:uppercase; letter-spacing:.18em; font-size:.72rem">Perfil informàtic</div>
-            <p class="serif muted">Apassionat per la informàtica i la ciberseguretat, amb ganes d’aprendre i d’aplicar coneixements per desenvolupar solucions segures i innovadores.</p>
+            <p class="serif muted">Apassionat per la informàtica i la ciberseguretat, amb ganes d'aprendre i d'aplicar coneixements per desenvolupar solucions segures i innovadores.</p>
             <div class="hline"></div>
             <div style="display:grid; gap:.5rem">
               <div><span class="ico mail"></span> <a class="ui" href="mailto:samilososami@gmail.com">samilososami@gmail.com</a></div>
@@ -374,17 +552,32 @@
       </section>
 
       <!-- Conclusions -->
-      <section id="conclusions" class="section">
+      <section id="conclusions" class="section fade-in">
         <header>
           <span class="ico trophy"></span>
           <h3>Conclusions finals</h3>
         </header>
         <div class="grid" style="grid-template-columns: 1fr 1fr; align-items:start">
-          <div class="card serif"><p>Una bona preparació és clau per entrar al món laboral: carta de presentació, CV i entrevista formen un conjunt per mostrar la millor versió de tu mateix.</p><p>La clau és combinar coneixements, actitud positiva i capacitat d’adaptació als canvis. Amb constància, sempre hi ha camí per créixer i aprendre.</p></div>
+          <div class="card serif"><p>Una bona preparació és clau per entrar al món laboral: carta de presentació, CV i entrevista formen un conjunt per mostrar la millor versió de tu mateix.</p><p>La clau és combinar coneixements, actitud positiva i capacitat d'adaptació als canvis. Amb constància, sempre hi ha camí per créixer i aprendre.</p></div>
           <div id="conclusionsGallery" class="gallery"></div>
         </div>
         <footer>
-          <div class="mono muted">© <span id="year"></span> — Pla de treball</div>
+          <div class="footer-info">
+            <div class="mono muted">© <span id="year"></span> — Pla de treball</div>
+            <div class="creator-info">
+              Creat per <span class="creator-name">Sami Gonzalez Kamel</span> amb ajuda de <span class="creator-name">ChatGPT</span></span>
+            </div>
+          </div>
+          <div class="footer-contact">
+            <div style="display: flex; align-items: center; gap: 0.5rem;">
+              <span class="ico mail"></span>
+              <a class="ui" href="mailto:samilososami@gmail.com" style="font-size: 0.9rem;">samilososami@gmail.com</a>
+            </div>
+            <div style="display: flex; align-items: center; gap: 0.5rem;">
+              <span class="ico phone"></span>
+              <span class="ui" style="font-size: 0.9rem;">+34 622 10 13 37</span>
+            </div>
+          </div>
         </footer>
       </section>
     </div>
@@ -408,13 +601,26 @@
   const $ = (s, r=document) => r.querySelector(s);
   const $$ = (s, r=document) => Array.from(r.querySelectorAll(s));
 
-  // Smooth scroll for sidebar links
-  $$('#sideNav a, .dock a').forEach(a => {
+  // Smooth scroll for sidebar links with animation
+  function smoothScrollTo(target) {
+    target.scrollIntoView({ behavior:'smooth', block:'start' });
+    
+    // Add active class to the target section briefly
+    target.classList.add('active-section');
+    setTimeout(() => {
+      target.classList.remove('active-section');
+    }, 1000);
+  }
+
+  $$('#sideNav a, .dock a, #comencaBtn, #veureCvBtn').forEach(a => {
     a.addEventListener('click', (e) => {
       const id = a.getAttribute('href');
       if(id && id.startsWith('#')){
         e.preventDefault();
-        document.querySelector(id).scrollIntoView({ behavior:'smooth', block:'start' });
+        const target = document.querySelector(id);
+        if (target) {
+          smoothScrollTo(target);
+        }
       }
     });
   });
@@ -442,20 +648,12 @@
   }, { root:null, rootMargin:'0px 0px -65% 0px', threshold:0 });
   $$('#intro, #carta, #cv, #entrevista, #adaptacio, #exemplecv, #conclusions').forEach(sec=>obs.observe(sec));
 
-  // Theme + images toggle
+  // Theme toggle
   const themeToggle = $('#themeToggle');
   themeToggle.addEventListener('click', ()=>{
     const light = document.body.getAttribute('data-theme') !== 'dark';
     document.body.setAttribute('data-theme', light ? 'dark' : 'light');
     themeToggle.textContent = light ? 'Mode clar' : 'Mode fosc';
-  });
-
-  const imgToggle = $('#imgToggle');
-  let imagesVisible = true;
-  imgToggle.addEventListener('click', ()=>{
-    imagesVisible = !imagesVisible;
-    $$('.gallery').forEach(g=> g.style.display = imagesVisible ? '' : 'none');
-    imgToggle.textContent = imagesVisible ? 'Amaga imatges' : 'Mostra imatges';
   });
 
   $('#printBtn').addEventListener('click', ()=> window.print());
@@ -514,8 +712,43 @@
 
   // CV view toggles
   const cvWrap = $('#cvWrap');
-  $('#cvWide').addEventListener('click', ()=>{ cvWrap.style.fontSize = ''; });
-  $('#cvCompact').addEventListener('click', ()=>{ cvWrap.style.fontSize = '.94rem'; });
+  $('#cvWide').addEventListener('click', ()=>{ 
+    cvWrap.style.fontSize = '';
+    $('#cvWide').classList.add('pulse');
+    setTimeout(() => $('#cvWide').classList.remove('pulse'), 500);
+  });
+  $('#cvCompact').addEventListener('click', ()=>{ 
+    cvWrap.style.fontSize = '.94rem';
+    $('#cvCompact').classList.add('pulse');
+    setTimeout(() => $('#cvCompact').classList.remove('pulse'), 500);
+  });
+
+  // Animate progress bars on scroll
+  const progressBars = $$('.bar > i');
+  const barObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        const bar = entry.target;
+        const width = bar.style.width;
+        bar.style.width = '0';
+        setTimeout(() => {
+          bar.style.width = width;
+        }, 300);
+      }
+    });
+  }, { threshold: 0.5 });
+  
+  progressBars.forEach(bar => barObserver.observe(bar));
+
+  // Button click animation
+  $$('.btn').forEach(btn => {
+    btn.addEventListener('click', function() {
+      this.classList.add('pulse');
+      setTimeout(() => {
+        this.classList.remove('pulse');
+      }, 500);
+    });
+  });
 </script>
 </body>
 </html>
